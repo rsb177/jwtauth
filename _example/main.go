@@ -9,27 +9,20 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-var tokenAuth *jwtauth.JWTAuth
-var tokenString string
-
-func init() {
-	tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
-
-	// For debugging/example purposes, we generate and print
-	// a sample jwt token with claims `user_id:123` here:
-	_, tokenString, _ = tokenAuth.Encode(jwt.MapClaims{"user_id": 123})
-}
+var tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
 
 func main() {
-	addr := ":3333"
-	fmt.Printf("Starting server on %v\n\n", addr)
+	fmt.Printf("Starting server on http://localhost:3333\n\n")
+
+	// Generate JWT token for debugging purposes.
+	_, tokenString, _ := tokenAuth.Encode(jwt.MapClaims{"user_id": 123})
 
 	fmt.Printf("Try the following commands in new terminal window:\n")
 	fmt.Printf("curl http://localhost:3333/\n")
 	fmt.Printf("curl http://localhost:3333/admin\n")
 	fmt.Printf("curl -H \"Authorization: BEARER %s\" http://localhost:3333/admin\n", tokenString)
 
-	http.ListenAndServe(addr, router())
+	http.ListenAndServe(":3333", router())
 }
 
 func router() http.Handler {

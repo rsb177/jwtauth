@@ -1,9 +1,9 @@
-**This is a fork of https://github.com/go-chi/jwtauth without the API-breaking changes introduced in https://github.com/go-chi/jwtauth/releases/tag/v1.1.0.**
+**This is a fork of [github.com/go-chi/jwtauth](https://github.com/go-chi/jwtauth) without the API breaking changes introduced in [v1.1.0](https://github.com/go-chi/jwtauth/releases/tag/v1.1.0).**
 
-- This repo uses community-driven JWT package [github.com/golang-jwt/jwt](https://github.com/golang-jwt/jwt), which is now [officially recognized](https://github.com/dgrijalva/jwt-go#this-repository-is-no-longer-maintaned) successor to the original `github.com/dgrijalva/jwt-go repository`.
-- The upstream repository [switched to `github.com/lestrrat-go/jwx`](https://github.com/go-chi/jwtauth/releases/tag/v1.1.0), which is a major breaking change that might lead to lots of code refactoring.
+- This repo uses community-maintained JWT package [`github.com/golang-jwt/jwt`](https://github.com/golang-jwt/jwt), which is now an [officially recognized](https://github.com/dgrijalva/jwt-go#this-repository-is-no-longer-maintaned) successor to the original `github.com/dgrijalva/jwt-go` package.
+- The upstream repository [switched to `github.com/lestrrat-go/jwx`](https://github.com/go-chi/jwtauth/releases/tag/v1.1.0) package instead, which has a different API, and thus introduces major breaking changes that might lead to lots of code refactoring.
 
-We hope this fork will save you some precious time. Enjoy!
+We hope this fork will save you some of your precious time. Enjoy!
 
 ---
 
@@ -61,25 +61,17 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/golang-cz/jwtauth"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-var tokenAuth *jwtauth.JWTAuth
-
-func init() {
-	tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
-
-	// For debugging/example purposes, we generate and print
-	// a sample jwt token with claims `user_id:123` here:
-	_, tokenString, _ := tokenAuth.Encode(jwt.MapClaims{"user_id": 123})
-	fmt.Printf("DEBUG: a sample jwt is %s\n\n", tokenString)
-}
+var tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
 
 func main() {
-	addr := ":3333"
-	fmt.Printf("Starting server on %v\n", addr)
-	http.ListenAndServe(addr, router())
+	fmt.Println("Starting server on http://localhost:3333")
+
+	http.ListenAndServe(":3333", router())
 }
 
 func router() http.Handler {
