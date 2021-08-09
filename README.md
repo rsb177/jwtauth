@@ -1,3 +1,12 @@
+**This is a fork of https://github.com/go-chi/jwtauth without the API-breaking changes introduced in https://github.com/go-chi/jwtauth/releases/tag/v1.1.0.**
+
+- This repo uses community-driven JWT package [github.com/golang-jwt/jwt](https://github.com/golang-jwt/jwt), which is now [officially recognized](https://github.com/dgrijalva/jwt-go#this-repository-is-no-longer-maintaned) successor to the original `github.com/dgrijalva/jwt-go repository`.
+- The upstream repository [switched to `github.com/lestrrat-go/jwx`](https://github.com/go-chi/jwtauth/releases/tag/v1.1.0), which is a major breaking change that might lead to lots of code refactoring.
+
+We hope this fork will save you some precious time. Enjoy!
+
+---
+
 # jwtauth - JWT authentication middleware for Go HTTP services
 
 [![GoDoc Widget]][godoc]
@@ -7,9 +16,7 @@ from a http request and send the result down the request context (`context.Conte
 
 Please note, `jwtauth` works with any Go http router, but resides under the go-chi group
 for maintenance and organization - its only 3rd party dependency is the underlying jwt library
-"github.com/dgrijalva/jwt-go".
-
-This package uses the new `context` package in Go 1.7 stdlib and [net/http#Request.Context](https://golang.org/pkg/net/http/#Request.Context) to pass values between handler chains.
+"github.com/golang-jwt/jwt".
 
 In a complete JWT-authentication flow, you'll first capture the token from a http
 request, decode it, verify it and then validate that its correctly signed and hasn't
@@ -55,7 +62,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/jwtauth"
+	"github.com/golang-cz/jwtauth"
 )
 
 var tokenAuth *jwtauth.JWTAuth
@@ -110,5 +117,5 @@ func router() http.Handler {
 
 [MIT](/LICENSE)
 
-[godoc]: https://godoc.org/github.com/go-chi/jwtauth
-[godoc widget]: https://godoc.org/github.com/go-chi/jwtauth?status.svg
+[godoc]: https://godoc.org/github.com/golang-cz/jwtauth
+[godoc widget]: https://godoc.org/github.com/golang-cz/jwtauth?status.svg
