@@ -1,8 +1,9 @@
-module github.com/go-chi/jwtauth
+module github.com/golang-cz/jwtauth
 
 go 1.15
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v1.5.1
+	github.com/go-chi/jwtauth v1.2.0
+	github.com/golang-jwt/jwt/v4 v4.0.0
 )
