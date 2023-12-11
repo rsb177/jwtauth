@@ -28,9 +28,9 @@ var (
 )
 
 type JWTAuth struct {
-	signKey   interface{}
+	SignKey   interface{}
 	verifyKey interface{}
-	signer    jwt.SigningMethod
+	Signer    jwt.SigningMethod
 	parser    *jwt.Parser
 }
 
@@ -44,9 +44,9 @@ func New(alg string, signKey interface{}, verifyKey interface{}) *JWTAuth {
 // introduced in jwt-go/v2.4.0.
 func NewWithParser(alg string, parser *jwt.Parser, signKey interface{}, verifyKey interface{}) *JWTAuth {
 	return &JWTAuth{
-		signKey:   signKey,
+		SignKey:   signKey,
 		verifyKey: verifyKey,
-		signer:    jwt.GetSigningMethod(alg),
+		Signer:    jwt.GetSigningMethod(alg),
 		parser:    parser,
 	}
 }
@@ -123,7 +123,7 @@ func VerifyRequest(ja *JWTAuth, r *http.Request, findTokenFns ...func(r *http.Re
 	}
 
 	// Verify signing algorithm
-	if token.Method != ja.signer {
+	if token.Method != ja.Signer {
 		return token, ErrAlgoInvalid
 	}
 
@@ -132,9 +132,9 @@ func VerifyRequest(ja *JWTAuth, r *http.Request, findTokenFns ...func(r *http.Re
 }
 
 func (ja *JWTAuth) Encode(claims jwt.Claims) (t *jwt.Token, tokenString string, err error) {
-	t = jwt.New(ja.signer)
+	t = jwt.New(ja.Signer)
 	t.Claims = claims
-	tokenString, err = t.SignedString(ja.signKey)
+	tokenString, err = t.SignedString(ja.SignKey)
 	t.Raw = tokenString
 	return
 }
@@ -151,7 +151,7 @@ func (ja *JWTAuth) keyFunc(t *jwt.Token) (interface{}, error) {
 	if ja.verifyKey != nil {
 		return ja.verifyKey, nil
 	} else {
-		return ja.signKey, nil
+		return ja.SignKey, nil
 	}
 }
 

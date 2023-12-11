@@ -1,4 +1,4 @@
-module github.com/golang-cz/jwtauth
+module github.com/rsb177/jwtauth
 
 go 1.15
 
