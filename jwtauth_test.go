@@ -5,7 +5,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -14,8 +13,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/golang-cz/jwtauth"
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
+	"github.com/rsb177/jwtauth"
 )
 
 var (
@@ -157,8 +156,6 @@ func TestMore(t *testing.T) {
 					case jwtauth.ErrUnauthorized:
 						http.Error(w, http.StatusText(401), 401)
 						return
-					case nil:
-						// no error
 					}
 				}
 
@@ -221,7 +218,7 @@ func TestMore(t *testing.T) {
 	}
 
 	h = newAuthHeader(jwt.MapClaims{"exp": jwtauth.EpochNow() - 1000})
-	if status, resp := testRequest(t, ts, "GET", "/admin", h, nil); status != 401 || resp != "expired\n" {
+	if status, resp := testRequest(t, ts, "GET", "/admin", h, nil); status != 401 || resp != "Unauthorized\n" {
 		t.Fatalf(resp)
 	}
 
@@ -259,7 +256,7 @@ func testRequest(t *testing.T, ts *httptest.Server, method, path string, header 
 		return 0, ""
 	}
 
-	respBody, err := ioutil.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 		return 0, ""

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 // Context keys
@@ -54,9 +54,9 @@ func NewWithParser(alg string, parser *jwt.Parser, signKey interface{}, verifyKe
 // Verifier http middleware handler will verify a JWT string from a http request.
 //
 // Verifier will search for a JWT token in a http request, in the order:
-//   1. 'jwt' URI query parameter
-//   2. 'Authorization: BEARER T' request header
-//   3. Cookie 'jwt' value
+//  1. 'jwt' URI query parameter
+//  2. 'Authorization: BEARER T' request header
+//  3. Cookie 'jwt' value
 //
 // The first JWT string that is found as a query parameter, authorization header
 // or cookie header is then decoded by the `jwt-go` library and a *jwt.Token
@@ -105,15 +105,6 @@ func VerifyRequest(ja *JWTAuth, r *http.Request, findTokenFns ...func(r *http.Re
 	// Verify the token
 	token, err := ja.Decode(tokenStr)
 	if err != nil {
-		if verr, ok := err.(*jwt.ValidationError); ok {
-			if verr.Errors&jwt.ValidationErrorExpired > 0 {
-				return token, ErrExpired
-			} else if verr.Errors&jwt.ValidationErrorIssuedAt > 0 {
-				return token, ErrIATInvalid
-			} else if verr.Errors&jwt.ValidationErrorNotValidYet > 0 {
-				return token, ErrNBFInvalid
-			}
-		}
 		return token, err
 	}
 
